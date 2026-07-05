@@ -32,3 +32,8 @@ padzie węzła → po 10 min szkic maila do OPL; wielkie miasto w adresie klient
 **D6 (2026-07-05): Evidence freeze nienaruszalny** — dowody zdarzenia (wycinki RRD ±2h, oba RRA)
 zapisywane raz przy wykryciu, nigdy nie nadpisywane (retencja 5-min = 50 h; spory z OPL trwają
 tygodnie). Poza zakresem źródła = `no_coverage`, nigdy „brak zdarzenia".
+
+**D7 (2026-07-05): `data/` poza repo (gitignore)** — artefakty zawierają dane wrażliwe (topologia
+= tajemnica przedsiębiorstwa, seriale ONT, adresy instalacji). GitHub (nawet prywatny) = chmura
+publiczna w rozumieniu SECURITY.md pkt 6. Deploy = kopiowanie data/ ręcznie/rsync; data/README.md
+dokumentuje pochodzenie i re-build każdego artefaktu.

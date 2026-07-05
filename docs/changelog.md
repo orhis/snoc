@@ -3,3 +3,5 @@
 ## 2026-07-05
 - projekt: scaffold fam-new (port 8505, moduły email/audit/scheduler)
 - docs: CLAUDE.md (rygor) + SECURITY.md + TODO (wątki T0–T6) + decisions D1–D6
+- core_gpon: transplantacja rdzenia z realtime/ (8 modułów + paths + pipeline), testy 9 passed, smoke OK (T1)
+- data/: artefakty topo/klucz/pp/eventlog (gitignored, D7) + README
