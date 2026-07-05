@@ -1,0 +1,79 @@
+# snoc — deploy na Synology Container Manager (LAN/VPN, bez publicznego URL).
+# Wygenerowane przez FAM (modules/deploy). Hardening: non-root, read-only fs,
+# drop caps, no-new-privileges, mem_limit.
+#
+# Deploy:  git pull && docker compose build --pull && docker compose up -d
+# Bind mount ./data musi być writable przez UID 1000:
+#   chown -R 1000:1000 ./data
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: snoc:latest
+    container_name: snoc
+    restart: unless-stopped
+
+    # Synology DSM Firewall ogranicza dostęp do LAN/VPN (Control Panel >
+    # Security > Firewall: allow port 8505 from LAN subnet).
+    ports:
+      - "8505:8501"
+
+    environment:
+      - TZ=Europe/Warsaw
+
+    # Dane przeżywają restart/update kontenera. user w kontenerze = UID 1000.
+    volumes:
+      - ./data:/app/data:rw
+
+    # Sekrety — .env na hoscie (chmod 600), NIE w imageu.
+    env_file:
+      - .env
+
+    # ===== SECURITY HARDENING =====
+    # Read-only rootfs — exploit nie podmieni kodu. tmpfs na /tmp + cache Streamlit.
+    read_only: true
+    tmpfs:
+      - /tmp:size=64M
+      - /home/snoc/.streamlit:size=8M
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    # mem_limit (top-level, nie deploy.resources) — działa w starym compose DSM.
+    # cpus pomijamy — Synology kernel nie wspiera CFS scheduler.
+    mem_limit: 512M
+    mem_reservation: 128M
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  scheduler:
+    image: snoc:latest   # obraz buduje serwis web; scheduler współdzieli
+    container_name: snoc-scheduler
+    restart: unless-stopped
+    command: ["python", "-m", "app.scheduler"]
+    healthcheck:
+      disable: true            # brak portu HTTP — healthcheck z obrazu fałszywie = unhealthy
+    environment:
+      - TZ=Europe/Warsaw
+      - PYTHONPATH=/app
+    depends_on:
+      - web
+    read_only: true
+    tmpfs:
+      - /tmp:size=64M
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512M
+    volumes:
+      - ./data:/app/data       # WSPÓLNY wolumen: scheduler pisze, web czyta
+    env_file:
+      - .env

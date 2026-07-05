@@ -1,0 +1,16 @@
+# Runtime
+streamlit>=1.40
+
+# Moduły FAM (pinowane po tagu — anti-drift)
+fam-auth @ git+https://github.com/orhis/FAM.git@v0.3.0#subdirectory=modules/auth
+fam-config-db @ git+https://github.com/orhis/FAM.git@v0.3.0#subdirectory=modules/config_db
+fam-email @ git+https://github.com/orhis/FAM.git@v0.3.0#subdirectory=modules/email_smtp
+fam-audit @ git+https://github.com/orhis/FAM.git@v0.3.0#subdirectory=modules/audit
+fam-scheduler @ git+https://github.com/orhis/FAM.git@v0.3.0#subdirectory=modules/scheduler
+
+# Dev/test
+pytest>=8
+
+# Narzędzia deweloperskie (nie runtime):
+#   fam-deploy @ git+https://github.com/orhis/FAM.git@v0.3.0#subdirectory=modules/deploy
+#   fam-doctor @ git+https://github.com/orhis/FAM.git@v0.3.0#subdirectory=modules/doctor

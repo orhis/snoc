@@ -1,0 +1,16 @@
+# Sekrety — NIGDY w repo
+.env
+.env.local
+.streamlit/secrets.toml
+
+# Dane lokalne
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/

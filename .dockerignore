@@ -1,0 +1,50 @@
+# Co NIE idzie do imagea — mniejszy image, szybszy build. Wygenerowane przez FAM.
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Dane lokalne — przez bind mount, nie przez image
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Sekrety — env_file w compose, NIE w imageu
+.env
+.env.local
+secrets/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Testy + dev
+tests/
+.coverage
+htmlcov/
+.pre-commit-config.yaml
+
+# Dokumentacja (nie potrzebna runtime)
+docs/
+*.md
+LICENSE
+
+# Build artifacts
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.*.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
