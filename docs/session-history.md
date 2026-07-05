@@ -10,3 +10,4 @@
 - T1: rdzeń przeniesiony (core_gpon, importy względne, paths.py SNOC_*), artefakty w data/ (D7), 9 testów passed (w tym regresja goldów), pipeline smoke = wyniki 1:1 z realtime.
 - Następne: T2 (modele MassOutage/AIContext/WorkOrder w SQLite) → potem T3 scheduler / T4 panel.
 - T2: rejestr na SQLite (schemat SOSDH bez multi-tenant), werdykt->AIContext z wymaganym reasoning; E2E 7 kart.
+- T3+T4: scheduler (compose-ready) + panel Streamlit (Zdarzenia/Obserwacje/Zlecenia/Ustawienia); UAT klikowy = Bart.
