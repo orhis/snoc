@@ -5,3 +5,4 @@
 - docs: CLAUDE.md (rygor) + SECURITY.md + TODO (wątki T0–T6) + decisions D1–D6
 - core_gpon: transplantacja rdzenia z realtime/ (8 modułów + paths + pipeline), testy 9 passed, smoke OK (T1)
 - data/: artefakty topo/klucz/pp/eventlog (gitignored, D7) + README
+- models+services: MassOutage/AIContext/WorkOrder + registry_service (DB), pipeline DI, testy 13 passed (T2)
