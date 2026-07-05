@@ -18,7 +18,7 @@ from app.auth import (
 )
 from app.db import get_db
 
-st.set_page_config(page_title="FAM App", page_icon="🚀")
+st.set_page_config(page_title="SNOC", page_icon="📡", layout="wide")
 
 
 def _client_ip() -> str:
@@ -50,13 +50,22 @@ def login_view() -> None:
 
 
 def dashboard_view(session) -> None:
-    st.title("🚀 FAM App")
-    st.write(f"Zalogowano jako **{session.display_name}**"
-             + (" (admin)" if session.is_admin else ""))
-    st.info("Pusty dashboard — tu dokładasz logikę swojej apki.")
-    if st.button("Wyloguj"):
-        del st.session_state["login"]
-        st.rerun()
+    """Nawigacja SNOC (T4): widoki dostają zalogowaną sesję — gate jest jeden, tutaj."""
+    from app.views import obserwacje, ustawienia, zdarzenia, zlecenia
+
+    with st.sidebar:
+        st.markdown(f"**{session.display_name}**" + (" · admin" if session.is_admin else ""))
+        if st.button("Wyloguj"):
+            del st.session_state["login"]
+            st.rerun()
+
+    pages = st.navigation([
+        st.Page(lambda: zdarzenia.render(session), title="Zdarzenia", icon="🚨", url_path="zdarzenia", default=True),
+        st.Page(lambda: obserwacje.render(session), title="Obserwacje", icon="👁", url_path="obserwacje"),
+        st.Page(lambda: zlecenia.render(session), title="Zlecenia", icon="🛠", url_path="zlecenia"),
+        st.Page(lambda: ustawienia.render(session), title="Ustawienia", icon="⚙️", url_path="ustawienia"),
+    ])
+    pages.run()
 
 
 def main() -> None:

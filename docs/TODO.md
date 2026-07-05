@@ -25,17 +25,22 @@
 - [x] migracja CSV: NIEPOTRZEBNA — rejestr odtwarza się z pulla; stary CSV realtime = archiwum
 - [ ] drobne: DeprecationWarning utcfromtimestamp (Py3.13) — do T3/T4 (uwaga aware-vs-naive!)
 
-## T3 — detektor jako scheduler
-- [ ] serwis detektora (fam_scheduler / compose scheduler-service): przebieg co 5 min →
-      MassOutage automatycznie (created_by=DETEKTOR) + evidence freeze + suppression PP + confirmer
-- [ ] dedup/scalanie z T2 (odpowiednik logiki rejestru)
+## T3 — detektor jako scheduler ✅ UKOŃCZONE (2026-07-05)
+- [x] `app/scheduler.py` — pętla co SNOC_SCAN_INTERVAL (300 s), pipeline→registry_service (DB),
+      błąd przebiegu nie zabija pętli; compose już woła `python -m app.scheduler`
+- [x] progi polityki ze SettingsStore nakładane PRZED każdym przebiegiem (`services/policy.py`)
+- [x] dedup/scalanie = registry_service (T2); testy +2 (policy defaults/override, iteracja→DB)
 
-## T4 — panel Streamlit (strony)
-- [ ] Zdarzenia: lista MassOutage + PANEL DOWODÓW (8 sekcji jak dashboard z realtime) + werdykt→AIContext
-- [ ] Obserwacje/BOK: uncertain + pojedyncze zgaśnięcia + recydywy
-- [ ] Zlecenia: WorkOrder dla technika (z elementem z localize i listą dotkniętych)
-- [ ] Ustawienia: progi polityki z SettingsStore (debounce, coverage, baterie=50 min, impact)
-- [ ] Raporty: dzienny + lead-time
+## T4 — panel Streamlit (strony) ✅ v1 UKOŃCZONE (2026-07-05)
+- [x] nawigacja (st.navigation, gate logowania w jednym miejscu) + layout wide
+- [x] **Zdarzenia**: karty z DB, panel dowodów 9 sekcji (sygnatura/zakres/mapa+coverage po ludzku/
+      PP-live z ID okien/confirmer/diagnoza/rekomendacja/werdykt/dowody), werdykt→AIContext
+      (reasoning wymagany), zmiana statusu, „Zlecenie dla technika" jednym przyciskiem
+- [x] **Obserwacje**: uncertain + recydywy elementów
+- [x] **Zlecenia**: WorkOrder (status/typ/przypisanie/notatki z terenu)
+- [x] **Ustawienia**: progi D5 ze SettingsStore (admin-only; scheduler stosuje ≤5 min)
+- [ ] Raporty (dzienny+lead-time jako strona) — v2; ⚠ przejście klikowe przez Barta = realny UAT
+- [ ] BOK-log (pojedyncze zgaśnięcia) nie trafia do DB — tylko log pipeline; do rozważenia w v2
 
 ## T5 — powiadomienia (fam_email)
 - [ ] mail przy nowej MassOutage (klasa+zakres+rekomendacja+link do panelu)
