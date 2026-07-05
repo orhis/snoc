@@ -15,14 +15,15 @@
       + `data/klucz/`, `data/pp/`, `data/eventlog/`
 - [ ] testy: przenieść walidacje (self-testy localize, regresja goldów jako testy z zamrożonych dowodów)
 
-## T2 — modele SQLite wg schematu SOSDH (bez multi-tenant) [D2]
-- [ ] `MassOutage` (tytuł, opis, obszar, started_at [u nas: z DETEKCJI, nie zgłoszenia] + override+powód,
-      ended_at, status, created_by[user/DETEKTOR]) — zastępuje incident_registry.csv
-- [ ] `AIContext` (FK→MassOutage/WorkOrder, action_type, input_snapshot JSON=model dowodów,
-      decision, reasoning WYMAGANE, time_to_decision, confidence, was_overridden+kto+czemu)
-- [ ] `WorkOrder` (numer, typ[serwis/wizja/budowa/nadzór], status-workflow, FK→MassOutage,
-      terminy, miejsce [element z localize!], notatki, assigned_to)
-- [ ] migracja: obecny incident_registry.csv/jsonl → MassOutage+AIContext (dane z walidacji zostają)
+## T2 — modele SQLite wg schematu SOSDH (bez multi-tenant) [D2] ✅ UKOŃCZONE (2026-07-05)
+- [x] `MassOutage` + `AIContext` (reasoning WYMAGANY, snapshot z chwili decyzji) + `WorkOrder` w app/models.py
+- [x] `app/services/registry_service.py` — register() kontrakt jak c_registry (scalanie olts+start±1h,
+      werdykty nietykalne, recydywa globalnie, JSONL dowodów zostaje plikowo D6) + add_verdict()
+- [x] pipeline: wstrzyknięcie rejestru (registry=) — rdzeń core_gpon czysty (D3), app podaje DB
+- [x] testy +4 (idempotencja/scalanie-po-re-diagnozie/recydywa/reasoning-wymagany) — **13 passed łącznie**
+- [x] smoke E2E: pipeline→DB = 7 kart MassOutage, recydywa S/017 0→1→2, B06 start z 5-min (0930)
+- [x] migracja CSV: NIEPOTRZEBNA — rejestr odtwarza się z pulla; stary CSV realtime = archiwum
+- [ ] drobne: DeprecationWarning utcfromtimestamp (Py3.13) — do T3/T4 (uwaga aware-vs-naive!)
 
 ## T3 — detektor jako scheduler
 - [ ] serwis detektora (fam_scheduler / compose scheduler-service): przebieg co 5 min →

@@ -18,7 +18,9 @@ def newest_pull():
     pulls = sorted(glob.glob(RAW + "Cacti_RRD_*"))
     return (pulls[-1] + "/") if pulls else None
 
-def main(rrd_dir=None, rra=None):
+def main(rrd_dir=None, rra=None, registry=None):
+    """registry: modul z register(events) — default CSV (stdlib); app podaje registry_service (DB)."""
+    REG_ = registry or REG
     os.makedirs(OUT, exist_ok=True)
     rrd_dir = rrd_dir or (_cfg.RRD_DIR or None) or newest_pull()
     print(f"[pipeline] źródło RRD: {rrd_dir}")
@@ -51,9 +53,18 @@ def main(rrd_dir=None, rra=None):
         print(f"[pipeline] confirmer: {nc}/{len(events)} potwierdzonych")
     except Exception as e:
         print(f"[pipeline] confirmer pominięty ({e})")
-    n_new, n_upd = REG.register(events)
-    reg = list(csv.DictReader(open(REG.CSV_P, encoding="utf-8"), delimiter=";"))
-    nowe = [r for r in reg if r["event_id"] not in before]
+    n_new, n_upd = REG_.register(events)
+    if registry is None and os.path.exists(REG.CSV_P):
+        reg = list(csv.DictReader(open(REG.CSV_P, encoding="utf-8"), delimiter=";"))
+        nowe = [r for r in reg if r["event_id"] not in before]
+    else:   # rejestr w DB (T2): raportuj z tego przebiegu
+        nowe = [{"event_id": e["event_id"], "start_utc": e["time_window"]["start_utc"],
+                 "class": e["diagnosis"]["class"], "confidence": e["diagnosis"]["confidence"],
+                 "olts": ",".join(e["affected_scope"]["olts"]), "n_onts": e["affected_scope"]["onts"],
+                 "common_element": e["topology_inference"].get("common_element") or "",
+                 "recommended_action": e["diagnosis"]["recommended_action"]}
+                for e in events]
+        reg = nowe
     rp = OUT + f"raport_{dt.date.today().isoformat()}.md"
     with open(rp, "w", encoding="utf-8") as f:
         f.write(f"# Raport SNOC — {dt.date.today().isoformat()}\n\nŹródło: `{rrd_dir}` | rejestr: {len(reg)} (+{n_new})\n\n")
