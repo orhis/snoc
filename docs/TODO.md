@@ -1,11 +1,12 @@
 # TODO — SNOC (wątki; 1 wątek = 1 branch)
 
-## T0 — fundament projektu ⬅ W TOKU (2026-07-05)
+## T0 — fundament projektu ✅ UKOŃCZONE (2026-07-05)
 - [x] scaffold `fam-new` (port 8505, moduły email/audit/scheduler)
 - [x] CLAUDE.md (rygor) + SECURITY.md + docs/
 - [x] FAM.md (poziom D) + wpis w FAM/INTEGRACJA.md
-- [ ] git init + pierwszy commit (na „zapisz wszystko")
-- [ ] venv + `pip install -r requirements.txt` + bootstrap admina + smoke `streamlit run`
+- [x] git init + pierwszy commit + push → github.com/orhis/snoc (main)
+- [x] venv (**Python 3.13** — fam_* wymaga ≥3.11, systemowy 3.10 za stary!) + pip install
+      + bootstrap admina (`admin`) + smoke: panel HTTP 200 na :8505 ✅
 
 ## T1 — transplantacja rdzenia domenowego (z `F:\BRT\...\realtime\`)
 - [ ] `app/core_gpon/`: rrd_los, topo_localize, c_detect, c_diagnose, c_confirm, c_evidence, pp_suppression
