@@ -28,7 +28,7 @@ def _client_ip() -> str:
 
 def login_view() -> None:
     st.title("🔐 Logowanie")
-    with st.form("login"):
+    with st.form("login_form"):   # key "login" kolidowalby z session_state["login"] (bug skeletonu FAM, fix 2026-07-05)
         username = st.text_input("Użytkownik")
         password = st.text_input("Hasło", type="password")
         code = st.text_input("Kod 2FA (jeśli włączone)", max_chars=6)

@@ -66,6 +66,7 @@ Bez tych trzech — brak OVERRIDE. Ty nigdy nie proponujesz; gdy zasada blokuje 
 - **RRD:** timestamp slotu = KONIEC interwału; czasy komunikatora/eventlogu = LOKALNE (CEST/CET), RRD = UTC — zawsze konwertuj świadomie (błąd D8 kosztował „niewidzialne" testy E03).
 - **Evidence freeze jest nienaruszalny** — raz zamrożonych dowodów zdarzenia nie nadpisujemy (retencja RRD!).
 - **Rejestr/dowody:** poza zakresem źródła = `no_coverage`, NIGDY „brak zdarzenia".
+- **Streamlit:** key widgetu/formularza NIE może równać się kluczowi session_state, który potem nadpisujesz (kolizja → StreamlitAPIException). Smoke HTTP ≠ UAT — flow UI testuj AppTestem.
 - **Nazwa ONU-a:b z net47** nie zawiera OLT ani karty — pełny adres ONT = (OLT, karta, port, indeks).
 
 ## Mapa dokumentów
