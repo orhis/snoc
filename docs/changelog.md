@@ -7,3 +7,4 @@
 - data/: artefakty topo/klucz/pp/eventlog (gitignored, D7) + README
 - models+services: MassOutage/AIContext/WorkOrder + registry_service (DB), pipeline DI, testy 13 passed (T2)
 - scheduler+policy: serwis 5-min z progami ze SettingsStore (T3); panel: 4 widoki + werdykty + zlecenia (T4 v1); testy 15 passed
+- fix: kolizja key formularza 'login' z session_state (bug skeletonu FAM, UAT Barta) + testy UI AppTest (17 passed)
